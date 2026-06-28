@@ -4,8 +4,44 @@ const pageService = require('../services/pages');
 const menuService = require('../services/menu');
 const pdfService = require('../services/pdfDocuments');
 const { resolveTenant, requireTenant } = require('../middleware/tenant');
+const path = require('path');
+const fs = require('fs');
 
 const router = express.Router();
+
+// Serve template-specific static assets
+router.get('/:businessSlug/assets/:filename', resolveTenant, requireTenant, async (req, res) => {
+  try {
+    const { filename } = req.params;
+    const template = req.tenant.template || 'general-diner';
+    const templateDir = path.join(__dirname, '../../templates/businesses', template);
+    const filePath = path.join(templateDir, filename);
+
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).send('Asset not found');
+    }
+
+    // Set content type based on file extension
+    const ext = path.extname(filename).toLowerCase();
+    const contentTypes = {
+      '.css': 'text/css',
+      '.js': 'application/javascript',
+      '.ico': 'image/x-icon',
+      '.png': 'image/png',
+      '.jpg': 'image/jpeg',
+      '.jpeg': 'image/jpeg',
+      '.gif': 'image/gif',
+      '.svg': 'image/svg+xml',
+    };
+    const contentType = contentTypes[ext] || 'application/octet-stream';
+
+    res.set('Content-Type', contentType);
+    res.sendFile(filePath);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error loading asset');
+  }
+});
 
 router.get('/:businessSlug/pdf/:pdfId', resolveTenant, requireTenant, async (req, res) => {
   try {
@@ -50,7 +86,9 @@ router.get('/:businessSlug/pdf/:pdfId', resolveTenant, requireTenant, async (req
 
 router.get('/:businessSlug/:pageSlug', resolveTenant, requireTenant, async (req, res) => {
   try {
-    const page = await pageService.getPageBySlug(req.tenant.id, req.params.pageSlug);
+    // Strip .html extension if present
+    const pageSlug = req.params.pageSlug.replace(/\.html$/, '');
+    const page = await pageService.getPageBySlug(req.tenant.id, pageSlug);
     if (!page) {
       return res.status(404).send('Page not found');
     }

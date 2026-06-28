@@ -1,0 +1,1 @@
+ALTER TABLE businesses ADD COLUMN IF NOT EXISTS template VARCHAR(100) NOT NULL DEFAULT 'general-diner';

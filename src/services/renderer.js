@@ -28,6 +28,11 @@ function resolveValue(contentTree, flatMap, key) {
 }
 
 function applyValueToElement($, el, key, value, explicitType, basePath = '') {
+  // If value is undefined, preserve the default HTML content
+  if (value === undefined) {
+    return;
+  }
+
   const type = explicitType || inferTypeFromValue(key, value);
 
   switch (type) {
@@ -126,6 +131,30 @@ async function renderPage({ business, page, menuItems = [] }) {
   const $ = cheerio.load(html, { decodeEntities: false });
 
   const basePath = business.slug ? `/${business.slug}` : '';
+  const assetsPath = basePath ? `${basePath}/assets` : '/assets';
+
+  // Rewrite static asset URLs to use tenant-aware paths
+  $('link[rel="stylesheet"]').each((_, el) => {
+    const href = $(el).attr('href');
+    if (href && !href.startsWith('http') && !href.startsWith('/')) {
+      $(el).attr('href', `${assetsPath}/${href}`);
+    }
+  });
+
+  $('script[src]').each((_, el) => {
+    const src = $(el).attr('src');
+    if (src && !src.startsWith('http') && !src.startsWith('/')) {
+      $(el).attr('src', `${assetsPath}/${src}`);
+    }
+  });
+
+  $('link[rel="icon"]').each((_, el) => {
+    const href = $(el).attr('href');
+    if (href && !href.startsWith('http') && !href.startsWith('/')) {
+      $(el).attr('href', `${assetsPath}/${href}`);
+    }
+  });
+
   injectMenu($, menuItems, basePath);
 
   $('[data-edit]').each((_, node) => {
