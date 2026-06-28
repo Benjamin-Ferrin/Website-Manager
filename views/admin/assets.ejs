@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assets — <%= business.name %></title>
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <header class="admin-header">
+    <strong>Platform Admin</strong>
+    <nav><a href="/admin/businesses/<%= business.id %>">← <%= business.name %></a></nav>
+  </header>
+  <main class="admin-main">
+    <h1>Asset Uploader</h1>
+    <% if (message) { %><p class="notice"><%= message %></p><% } %>
+
+    <form method="post" action="/admin/businesses/<%= business.id %>/assets" enctype="multipart/form-data">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <label>Upload image or PDF</label>
+      <input type="file" name="file" accept="image/*,application/pdf" required>
+      <button type="submit">Upload</button>
+    </form>
+
+    <h2>Uploaded files</h2>
+    <table class="admin-table">
+      <thead><tr><th>Name</th><th>Type</th><th>Preview</th><th>URL</th></tr></thead>
+      <tbody>
+        <% assets.forEach(function(a) { %>
+        <tr>
+          <td><%= a.original_name %></td>
+          <td><%= a.mime_type %></td>
+          <td>
+            <% if (a.mime_type.startsWith('image/')) { %>
+            <img src="<%= a.public_url %>" alt="" class="thumb">
+            <% } else { %>PDF<% } %>
+          </td>
+          <td><code><%= a.public_url %></code></td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+
+    <% if (pdfs.length) { %>
+    <h2>PDF conversions</h2>
+    <ul>
+      <% pdfs.forEach(function(pdf) { %>
+      <li>
+        <%= pdf.title %> — <strong><%= pdf.conversion_status %></strong>
+        <% if (pdf.conversion_error) { %>(<%= pdf.conversion_error %>)<% } %>
+        <a href="/<%= business.slug %>/pdf/<%= pdf.id %>" target="_blank">View</a>
+        | <a href="/<%= business.slug %>/pdf/<%= pdf.id %>?format=original" target="_blank">Original</a>
+      </li>
+      <% }); %>
+    </ul>
+    <% } %>
+  </main>
+</body>
+</html>

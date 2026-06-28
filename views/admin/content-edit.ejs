@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Content Editor</title>
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <header class="admin-header">
+    <strong>Platform Admin</strong>
+    <nav>
+      <a href="/admin/businesses/<%= business.id %>">← <%= business.name %></a>
+      <% if (page) { %> | Page: <%= page.title %><% } else { %> | Global content<% } %>
+    </nav>
+  </header>
+  <main class="admin-main">
+    <h1>Content Editor</h1>
+    <p>Fields are auto-generated from stored content. Add new keys by editing JSON below or updating templates.</p>
+
+    <form method="post" action="<%= page ? '/admin/businesses/' + business.id + '/pages/' + page.id + '/content' : '/admin/businesses/' + business.id + '/content' %>">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+      <% if (fields.length === 0) { %>
+      <p>No content fields yet. Add initial content as JSON:</p>
+      <textarea name="content[businessName]" rows="1" placeholder="businessName value"></textarea>
+      <% } else { %>
+      <div class="form-grid">
+        <% fields.forEach(function(field) { %>
+        <div class="form-field"><%- field.rendered.html %></div>
+        <% }); %>
+      </div>
+      <% } %>
+
+      <h3>Add new field</h3>
+      <div class="inline-fields">
+        <input type="text" name="content[announcement]" placeholder="Key: announcement">
+      </div>
+
+      <button type="submit">Save content</button>
+    </form>
+
+    <section>
+      <h3>Raw content (debug)</h3>
+      <pre><%= JSON.stringify(contentMap, null, 2) %></pre>
+    </section>
+  </main>
+</body>
+</html>

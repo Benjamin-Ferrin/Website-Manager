@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-edit="businessName">Business Name</title>
+  <link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1 data-edit="businessName">Business Name</h1>
+      <nav data-menu="main"></nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <img data-edit="heroImage" data-edit-type="image" src="" alt="Hero" class="hero-image">
+      <p class="announcement" data-edit="announcement">Welcome!</p>
+    </section>
+
+    <section class="contact">
+      <h2>Contact Us</h2>
+      <p>Phone: <span data-edit="contact.phone">555-0000</span></p>
+      <p>Email: <a data-edit="contact.email" data-edit-type="link" href="mailto:info@example.com">info@example.com</a></p>
+      <p>Address: <span data-edit="contact.address">123 Main St</span></p>
+    </section>
+
+    <section class="hours">
+      <h2>Hours</h2>
+      <p>Monday: <span data-edit="hours.monday">9am – 5pm</span></p>
+      <p>Tuesday: <span data-edit="hours.tuesday">9am – 5pm</span></p>
+      <p>Wednesday: <span data-edit="hours.wednesday">9am – 5pm</span></p>
+      <p>Thursday: <span data-edit="hours.thursday">9am – 5pm</span></p>
+      <p>Friday: <span data-edit="hours.friday">9am – 5pm</span></p>
+      <p>Saturday: <span data-edit="hours.saturday">10am – 3pm</span></p>
+      <p>Sunday: <span data-edit="hours.sunday">Closed</span></p>
+    </section>
+
+    <section class="about-preview">
+      <div data-edit="aboutBlurb" data-edit-type="html">
+        <p>Learn more about us on our about page.</p>
+      </div>
+      <p><a data-edit="aboutLink" data-edit-type="link" href="/about">About us →</a></p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; <span data-edit="businessName">Business</span></p>
+    </div>
+  </footer>
+</body>
+</html>

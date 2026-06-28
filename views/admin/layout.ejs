@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title + ' — ' : '' %>Admin</title>
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <% if (typeof userEmail !== 'undefined' && userEmail) { %>
+  <header class="admin-header">
+    <strong>Platform Admin</strong>
+    <nav>
+      <a href="/admin">Dashboard</a>
+      <span><%= userEmail %></span>
+      <form method="post" action="/admin/logout" style="display:inline">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <button type="submit" class="link-btn">Logout</button>
+      </form>
+    </nav>
+  </header>
+  <% } %>
+  <main class="admin-main">
+    <%- body %>
+  </main>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

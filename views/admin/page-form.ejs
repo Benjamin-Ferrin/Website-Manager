@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= page ? 'Edit Page' : 'New Page' %></title>
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <header class="admin-header">
+    <strong>Platform Admin</strong>
+    <nav><a href="/admin/businesses/<%= business.id %>">← <%= business.name %></a></nav>
+  </header>
+  <main class="admin-main">
+    <h1><%= page ? 'Edit Page' : 'New Page' %></h1>
+    <% if (error) { %><p class="error"><%= error %></p><% } %>
+
+    <form method="post" action="<%= page ? '/admin/businesses/' + business.id + '/pages/' + page.id : '/admin/businesses/' + business.id + '/pages' %>">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <label>Title</label>
+      <input type="text" name="title" value="<%= page ? page.title : '' %>" required>
+      <label>Slug</label>
+      <input type="text" name="slug" value="<%= page ? page.slug : '' %>" required>
+      <label>Template path</label>
+      <input type="text" name="template_path" value="<%= page ? page.template_path : '' %>" required placeholder="templates/businesses/als-diner/home.html">
+      <label>Sort order</label>
+      <input type="number" name="sort_order" value="<%= page ? page.sort_order : 0 %>">
+      <label><input type="checkbox" name="is_home" <%= page && page.is_home ? 'checked' : '' %>> Home page</label>
+      <button type="submit">Save</button>
+    </form>
+  </main>
+</body>
+</html>

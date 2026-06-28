@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <header class="admin-header">
+    <strong>Platform Admin</strong>
+    <nav>
+      <span><%= userEmail %></span>
+      <form method="post" action="/admin/logout" style="display:inline">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <button type="submit" class="link-btn">Logout</button>
+      </form>
+    </nav>
+  </header>
+  <main class="admin-main">
+    <h1>Dashboard</h1>
+    <p><a class="btn" href="/admin/businesses/new">+ New Business</a></p>
+
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Slug</th>
+          <th>Domain</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% businesses.forEach(function(b) { %>
+        <tr>
+          <td><%= b.name %></td>
+          <td><a href="/<%= b.slug %>" target="_blank"><%= b.slug %></a></td>
+          <td><%= b.domain || '—' %></td>
+          <td><a href="/admin/businesses/<%= b.id %>">Manage</a></td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+
+    <% if (businesses.length === 0) { %>
+    <p>No businesses yet. Create one to get started.</p>
+    <% } %>
+  </main>
+</body>
+</html>

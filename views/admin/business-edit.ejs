@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= business.name %></title>
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <header class="admin-header">
+    <strong>Platform Admin</strong>
+    <nav><a href="/admin">Dashboard</a></nav>
+  </header>
+  <main class="admin-main">
+    <h1><%= business.name %></h1>
+    <p>
+      <a href="/<%= business.slug %>" target="_blank">View site</a>
+      | <a href="/admin/businesses/<%= business.id %>/content">Business content</a>
+      | <a href="/admin/businesses/<%= business.id %>/assets">Assets</a>
+      | <a href="/admin/businesses/<%= business.id %>/menu">Menu</a>
+    </p>
+
+    <% if (typeof error !== 'undefined' && error) { %><p class="error"><%= error %></p><% } %>
+
+    <section>
+      <h2>Settings</h2>
+      <form method="post" action="/admin/businesses/<%= business.id %>">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <label>Name</label>
+        <input type="text" name="name" value="<%= business.name %>">
+        <label>Slug</label>
+        <input type="text" name="slug" value="<%= business.slug %>">
+        <label>Domain</label>
+        <input type="text" name="domain" value="<%= business.domain || '' %>">
+        <label>Settings (JSON)</label>
+        <textarea name="settings" rows="4"><%= JSON.stringify(business.settings || {}, null, 2) %></textarea>
+        <button type="submit">Save</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Pages</h2>
+      <p><a href="/admin/businesses/<%= business.id %>/pages/new">+ Add page</a></p>
+      <table class="admin-table">
+        <thead><tr><th>Title</th><th>Slug</th><th>Home</th><th></th></tr></thead>
+        <tbody>
+          <% pages.forEach(function(p) { %>
+          <tr>
+            <td><%= p.title %></td>
+            <td><%= p.slug %></td>
+            <td><%= p.is_home ? 'Yes' : '' %></td>
+            <td>
+              <a href="/admin/businesses/<%= business.id %>/pages/<%= p.id %>">Edit</a>
+              | <a href="/admin/businesses/<%= business.id %>/pages/<%= p.id %>/content">Content</a>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Recent Assets</h2>
+      <ul>
+        <% assets.slice(0, 5).forEach(function(a) { %>
+        <li><%= a.original_name %> (<%= a.mime_type %>)</li>
+        <% }); %>
+      </ul>
+      <p><a href="/admin/businesses/<%= business.id %>/assets">Manage assets →</a></p>
+    </section>
+
+    <% if (pdfs.length) { %>
+    <section>
+      <h2>PDF Documents</h2>
+      <ul>
+        <% pdfs.forEach(function(pdf) { %>
+        <li>
+          <%= pdf.title %> — <%= pdf.conversion_status %>
+          <a href="/<%= business.slug %>/pdf/<%= pdf.id %>" target="_blank">View HTML</a>
+        </li>
+        <% }); %>
+      </ul>
+    </section>
+    <% } %>
+  </main>
+</body>
+</html>
