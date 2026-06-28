@@ -1,4 +1,4 @@
-# Multi-Tenant CMS
+# Multi-Website (Content) Management System
 
 A multi-tenant content management system built with Node.js and Express that allows you to manage multiple business websites from a single admin panel. Each business tenant can have its own pages, content, assets, navigation menus, and PDF documents.
 
