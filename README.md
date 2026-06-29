@@ -48,7 +48,7 @@ A multi-tenant content management system built with Node.js and Express that all
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/Benjamin-Ferrin/PaperCMS.git
 cd Modular-Backend
 ```
 
